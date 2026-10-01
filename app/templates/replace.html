@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+{% block title %}Найти и заменить — {{ table }}{% endblock %}
+
+{% macro scope_inputs() %}
+  {% for k, v in scope.items() if v %}<input type="hidden" name="{{ k }}" value="{{ v }}">{% endfor %}
+{% endmacro %}
+
+{% block body %}
+<div class="formhead">
+  <h1>Найти и заменить <span class="in">в {{ table }}</span></h1>
+  <div class="formhead-actions"><a class="btn ghost" href="{{ back_url }}">← К списку</a></div>
+</div>
+
+<div class="meta">
+  Область:
+  {% if args.q or args.filters %}
+    {% if args.q %}<span class="chip">поиск: {{ args.q }}</span>{% endif %}
+    {% for k, v in args.filters.items() %}
+      <span class="chip">{{ k }} = {{ '(пусто)' if v == empty_filter else v }}</span>
+    {% endfor %}
+  {% else %}
+    <b>вся таблица</b> — чтобы сузить, задайте поиск или фильтры в списке и нажмите «Найти и заменить» там
+  {% endif %}
+</div>
+
+{% if error %}<div class="flash err">{{ error }}</div>{% endif %}
+{% if notice %}<div class="flash warn">{{ notice }}</div>{% endif %}
+{% if done %}
+  <div class="flash ok">Изменено записей: <b>{{ done.count }}</b>. Копия базы до замены: <code>backups/{{ done.snapshot }}</code></div>
+{% endif %}
+
+<form class="group replace" method="get" action="/t/{{ table }}/replace">
+  {{ scope_inputs() }}
+  <input type="hidden" name="preview" value="1">
+  <div class="fields">
+    <label class="field">
+      <span class="lbl">Колонка</span>
+      <select name="column" id="rp-column" required>
+        <option value="">— выберите —</option>
+        {% for c in columns %}
+          <option value="{{ c.name }}" {{ 'selected' if c.name == args.column else '' }}>{{ c.name }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <label class="field">
+      <span class="lbl">Как искать</span>
+      <select name="mode">
+        {% for key, title in modes.items() %}
+          <option value="{{ key }}" {{ 'selected' if key == args.mode else '' }}>{{ title }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <label class="field">
+      <span class="lbl">Найти</span>
+      <input name="find" value="{{ args.find }}" autocomplete="off" id="rp-find">
+    </label>
+    <label class="field">
+      <span class="lbl">Заменить на <i>(пусто — очистить)</i></span>
+      <input name="repl" value="{{ args.repl }}" autocomplete="off">
+    </label>
+  </div>
+  <div class="replace-foot">
+    <label class="check"><input type="checkbox" name="case" value="1" {{ 'checked' if args.case else '' }}> учитывать регистр</label>
+    <span class="hint">
+      «значение целиком» с пустым «Найти» заполняет пустые ячейки ·
+      в регулярном выражении группы подставляются как <code>\1</code>
+    </span>
+    <button class="btn" type="submit">Показать изменения</button>
+  </div>
+</form>
+
+{% if changes is not none %}
+  {% if not changes %}
+    <div class="flash">Ничего не меняется — ни одна запись в области не подходит.</div>
+  {% else %}
+    <form method="post" action="/t/{{ table }}/replace" class="replace-apply"
+          data-confirm="Заменить значение «{{ args.column }}» в {{ changes|length }} записях? Перед заменой будет сделана копия базы.">
+      {{ scope_inputs() }}
+      <input type="hidden" name="column" value="{{ args.column }}">
+      <input type="hidden" name="mode" value="{{ args.mode }}">
+      <input type="hidden" name="find" value="{{ args.find }}">
+      <input type="hidden" name="repl" value="{{ args.repl }}">
+      {% if args.case %}<input type="hidden" name="case" value="1">{% endif %}
+      <input type="hidden" name="token" value="{{ token }}">
+      <span>Изменится записей: <b>{{ changes|length }}</b>
+        {% if errors %} · <span class="bad">с ошибками: {{ errors }} — замена невозможна</span>{% endif %}
+      </span>
+      <button class="btn primary" type="submit" {{ 'disabled' if errors else '' }}>Заменить ({{ changes|length }})</button>
+    </form>
+
+    <div class="grid-wrap">
+    <table class="grid replace-grid">
+      <thead><tr><th class="num">{{ t.id_col }}</th><th>{{ t.label_col if t.label_col != args.column else '' }}</th><th>Было</th><th>Станет</th></tr></thead>
+      <tbody>
+      {% for c in shown %}
+        <tr class="{{ 'err' if c.error else '' }}">
+          <td class="num"><a href="/t/{{ table }}/{{ c.id|int }}/edit" target="_blank">{{ c.id|int }}</a></td>
+          <td>{{ c.label if c.label is not none else '' }}</td>
+          <td class="before">{{ c.before if c.before != '' else '(пусто)' }}</td>
+          <td class="after">{{ c.error if c.error else (c.after if c.after != '' else '(пусто)') }}</td>
+        </tr>
+      {% endfor %}
+      {% if changes|length > shown|length %}
+        <tr><td colspan="4" class="empty">…и ещё {{ changes|length - shown|length }} — показаны первые {{ preview_max }}</td></tr>
+      {% endif %}
+      </tbody>
+    </table>
+    </div>
+  {% endif %}
+{% endif %}
+{% endblock %}

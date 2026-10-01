@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block title %}Футпринты — Component DB{% endblock %}
+
+{% block body %}
+<div class="formhead">
+  <h1>Футпринты по плотности монтажа</h1>
+  <div class="formhead-actions">
+    <a class="btn ghost" href="/footprints">Перечитать библиотеку</a>
+    <form method="post" action="/footprints/apply" class="inline"
+          data-confirm="Записать футпринты в {{ rows }} записей? Перед записью будет сделана копия базы.">
+      <button class="btn primary" type="submit"
+              {{ 'disabled' if blocked or (not rows and not new_cols) else '' }}>
+        {% if rows %}Применить ({{ rows }} записей){% elif new_cols %}Добавить колонки{% else %}Менять нечего{% endif %}
+      </button>
+    </form>
+  </div>
+</div>
+
+<p class="meta">
+  Шаблон по размеру (первое слово Package) и префиксу из Category:
+  <code>Footprint Ref</code> — <code>CAP: 0201</code> (medium),
+  <code>Footprint Ref 2</code> — <code>CAP: 0201 HD</code> (high density),
+  <code>Footprint Ref 3</code> — <code>CAP: 0201 UHD</code> (minimal pad, RF).
+  Если варианта нет в .PcbLib, текущее значение не трогается. Страница каждый раз заново читает библиотеку.
+</p>
+
+{% if result %}
+  <div class="flash {{ 'ok' if result.ok else 'err' }}">
+    {% if result.ok and result.changed %}<b>Записано: {{ result.changed }} записей.</b>{% endif %}
+    {% for line in result.lines %}<div>{{ line }}</div>{% endfor %}
+  </div>
+{% endif %}
+{% if blocked %}<div class="flash warn">{{ blocked }}</div>{% endif %}
+{% if new_cols %}
+  <div class="flash warn">В таблице нет колонок Footprint Ref 3 / Footprint Path 3 — они будут добавлены.</div>
+{% endif %}
+
+{% for tb in report %}
+<fieldset class="group">
+  <legend>{{ tb.name }} · {{ tb.total }} записей · меняется {{ tb.changed }}</legend>
+  <table class="grid fp">
+    <thead><tr><th>Размер</th><th>Слот</th><th>Сейчас</th><th>Станет</th><th>Как найден</th><th class="num">Записей</th></tr></thead>
+    <tbody>
+    {% for size, slots in tb.sizes %}
+      {% for ref_col, before, after, how, n in slots %}
+        {% set change = before != after %}
+        <tr class="{{ 'chg' if change else ('miss' if 'нет варианта' in how else 'same') }}">
+          <td>{% if loop.first %}<b>{{ size }}</b>{% endif %}</td>
+          <td>{{ ref_col }}</td>
+          <td>{{ before }}</td>
+          <td>{{ after if change else '' }}</td>
+          <td>{{ how }}</td>
+          <td class="num">{{ n }}</td>
+        </tr>
+      {% endfor %}
+    {% endfor %}
+    </tbody>
+  </table>
+  {% for lib, names in tb.missing.items() %}
+    <div class="fp-note"><b>Нет в {{ lib }}:</b> {{ names|join('; ') }}</div>
+  {% endfor %}
+  {% for why, n in tb.skipped.items() %}
+    <div class="fp-note">Пропущено {{ n }}: {{ why }}</div>
+  {% endfor %}
+</fieldset>
+{% else %}
+  {% if not blocked %}<div class="flash">Нет таблиц для обработки.</div>{% endif %}
+{% endfor %}
+{% endblock %}

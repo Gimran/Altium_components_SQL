@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% block title %}Ошибка — Component DB{% endblock %}
+{% block body %}
+<div class="flash err big">{{ message }}</div>
+<p class="meta">Путь к базе задаётся в <code>app/config.json</code>, ключ <code>db_path</code>.</p>
+<p><a class="btn" href="/">На главную</a></p>
+{% endblock %}

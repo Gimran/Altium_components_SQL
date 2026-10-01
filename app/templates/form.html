@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% block title %}
+  {% if row_id %}{{ values.get('PartNumber') or row_id }}{% else %}Новая запись{% endif %} — {{ table }}
+{% endblock %}
+
+{% block body %}
+<form method="post" class="record" data-mode="{{ 'edit' if row_id else 'new' }}"
+      action="{% if row_id %}/t/{{ table }}/{{ row_id }}/edit{% else %}/t/{{ table }}/new{% endif %}">
+
+  <div class="formhead">
+    <h1>
+      {% if row_id %}Правка записи №{{ row_id|int }}
+      {% elif clone %}Новая запись — копия №{{ clone|int }}
+      {% else %}Новая запись{% endif %}
+      <span class="in">в {{ table }}</span>
+    </h1>
+    <div class="formhead-actions">
+      <a class="btn ghost" href="/t/{{ table }}">Отмена</a>
+      <button class="btn primary" type="submit">Сохранить</button>
+    </div>
+  </div>
+
+  {% if error %}<div class="flash err">{{ error }}</div>{% endif %}
+  {% if warning %}
+    <div class="flash warn">
+      {{ warning }}
+      <label class="force"><input type="checkbox" name="_force" value="1"> да, сохранить</label>
+    </div>
+  {% endif %}
+  <input type="hidden" name="_clone" value="{{ clone }}">
+
+  {% for key, title, cols in t.grouped() %}
+    <fieldset class="group {{ key }}">
+      <legend>{{ title }}</legend>
+      <div class="fields">
+      {% for c in cols %}
+        {% set val = values.get(c.name) %}
+        {% set opts = picklists.get(c.name) %}
+        {% set choices = selects.get(c.name) %}
+        <label class="field {{ 'wide' if c.name in ('Description', 'Zone') or c.is_url else '' }} {{ 'calc' if c.read_only else '' }}">
+          <span class="lbl">
+            {{ c.name }}{% if c.is_numeric %} <i>число</i>{% endif %}
+            {% if c.read_only %}<i title="Вычисляемое поле: {{ c.expression }}">= {{ c.expression }}</i>{% endif %}
+          </span>
+          {% if choices %}
+            {# Footprints come from the .PcbLib itself, so only real patterns can be picked. #}
+            <select name="{{ c.name }}" data-manual="{{ manual_value }}">
+              <option value="">— не задан —</option>
+              {% for name, in_lib in choices %}
+                <option value="{{ name }}" {{ 'selected' if val == name else '' }}>
+                  {{ name }}{% if not in_lib %} ⚠ нет в библиотеке{% endif %}
+                </option>
+              {% endfor %}
+              {% if val and val not in choices|map(attribute=0)|list %}
+                <option value="{{ val }}" selected>{{ val }} ⚠ нет в библиотеке</option>
+              {% endif %}
+              <option value="{{ manual_value }}">✎ ввести вручную…</option>
+            </select>
+          {% else %}
+          <input name="{{ c.name }}"
+                 value="{{ '' if val is none else val }}"
+                 {% if c.read_only %}disabled{% endif %}
+                 {% if opts %}list="dl-{{ loop.index }}-{{ key }}"{% endif %}
+                 {% if c.maxlength %}maxlength="{{ c.maxlength }}"{% endif %}
+                 {% if c.name == 'PartNumber' %}required autofocus autocomplete="off"{% endif %}
+                 {% if c.is_url %}spellcheck="false"{% endif %}>
+          {% if opts %}
+            <datalist id="dl-{{ loop.index }}-{{ key }}">
+              {% for o in opts %}<option value="{{ o }}"></option>{% endfor %}
+            </datalist>
+          {% endif %}
+          {% endif %}
+          {% if c.is_url and val %}<a class="peek" href="{{ val if val.startswith('http') else 'https:' + val }}" target="_blank" rel="noopener">↗</a>{% endif %}
+        </label>
+      {% endfor %}
+      </div>
+    </fieldset>
+  {% endfor %}
+
+  <div class="formfoot">
+    <div class="hint">
+      {{ t.id_col }}: {% if row_id %}{{ row_id|int }}{% elif t.id_is_autonumber %}назначится автоматически{% else %}следующий свободный{% endif %}
+      · Ctrl+S — сохранить
+    </div>
+    <div>
+      <a class="btn ghost" href="/t/{{ table }}">Отмена</a>
+      <button class="btn primary" type="submit">Сохранить</button>
+    </div>
+  </div>
+</form>
+
+{% if row_id %}
+<form method="post" action="/t/{{ table }}/{{ row_id }}/delete" class="danger-zone"
+      data-confirm="Удалить запись {{ values.get('PartNumber') or row_id }}? Это необратимо.">
+  <button class="btn danger" type="submit">Удалить запись</button>
+</form>
+{% endif %}
+{% endblock %}

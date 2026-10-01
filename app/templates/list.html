@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% block title %}{{ table }} — Component DB{% endblock %}
+
+{% block body %}
+<div class="toolbar">
+  <form class="search" method="get" action="/t/{{ table }}">
+    <input type="search" name="q" value="{{ q }}" autofocus
+           placeholder="Поиск по всем текстовым полям — можно несколько слов: 0402 100k 1%">
+    <button type="submit">Найти</button>
+    {% if q %}<a class="btn ghost" href="/t/{{ table }}">Сбросить</a>{% endif %}
+  </form>
+  {% set scope = {'q': q} %}{% for k, v in filters.items() %}{% set _ = scope.update({filter_prefix ~ k: v}) %}{% endfor %}
+  <a class="btn" href="/t/{{ table }}/replace?{{ scope|urlencode }}"
+     title="Массовая замена в найденных записях{{ ' (' ~ total ~ ')' }}">Найти и заменить</a>
+  <a class="btn primary" href="/t/{{ table }}/new">+ Добавить</a>
+</div>
+
+{% if msg %}<div class="flash ok">{{ msg }}</div>{% endif %}
+
+{# Every filter select lives in one GET form, so choices combine instead of replacing each other. #}
+<form class="filters" method="get" action="/t/{{ table }}" id="filterform">
+  <input type="hidden" name="q" value="{{ q }}">
+  <input type="hidden" name="sort" value="{{ sort }}">
+  <input type="hidden" name="desc" value="{{ 1 if desc else 0 }}">
+  {% for c in filter_cols %}
+    {% set opts = filter_options.get(c.name, []) %}
+    <label class="filter {{ 'active' if filters.get(c.name) else '' }}">
+      <span>{{ c.name }}</span>
+      <select name="{{ filter_prefix }}{{ c.name }}">
+        <option value="">— все —</option>
+        {% for o in opts %}
+          {% set val = o if o else empty_filter %}
+          <option value="{{ val }}" {{ 'selected' if filters.get(c.name) == val else '' }}>
+            {{ o if o else '(пусто)' }}
+          </option>
+        {% endfor %}
+        {% if filters.get(c.name) and filters[c.name] not in opts and filters[c.name] != empty_filter %}
+          <option value="{{ filters[c.name] }}" selected>{{ filters[c.name] }}</option>
+        {% endif %}
+      </select>
+    </label>
+  {% endfor %}
+  {% if filters %}
+    <a class="btn ghost tiny" href="/t/{{ table }}?q={{ q|urlencode }}">Сбросить фильтры</a>
+  {% endif %}
+  <noscript><button class="btn tiny" type="submit">Применить</button></noscript>
+</form>
+
+<div class="meta">
+  Найдено: <b>{{ total }}</b>{% if pages > 1 %} · страница {{ page }} из {{ pages }}{% endif %}
+  {% if filters %} · фильтров: {{ filters|length }}{% endif %}
+</div>
+
+<div class="grid-wrap">
+<table class="grid">
+  <thead>
+    <tr>
+      <th class="num">{{ t.id_col }}</th>
+      {% for c in grid %}
+        <th><a href="/t/{{ table }}?q={{ q|urlencode }}&sort={{ c|urlencode }}&desc={{ 0 if (sort == c and desc) else 1 }}">{{ c }}</a></th>
+      {% endfor %}
+      <th class="actions"></th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for r in rows %}
+    {% set rid = r[t.id_col] %}
+    <tr>
+      <td class="num">{{ rid|int }}</td>
+      {% for c in grid %}
+        <td title="{{ r[c] if r[c] is not none else '' }}">{{ r[c] if r[c] is not none else '' }}</td>
+      {% endfor %}
+      <td class="actions">
+        <a class="btn tiny" href="/t/{{ table }}/{{ rid|int }}/edit">Править</a>
+        <a class="btn tiny" href="/t/{{ table }}/new?clone={{ rid|int }}">Клон</a>
+        <form method="post" action="/t/{{ table }}/{{ rid|int }}/delete" class="inline"
+              data-confirm="Удалить запись {{ r[t.label_col] if t.label_col in r else rid }}?">
+          <button class="btn tiny danger" type="submit">×</button>
+        </form>
+      </td>
+    </tr>
+  {% else %}
+    <tr><td colspan="{{ grid|length + 2 }}" class="empty">Ничего не найдено</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+</div>
+
+{% if pages > 1 %}
+<div class="pager">
+  {% if page > 1 %}<a class="btn" href="{{ page_url(page - 1) }}">← Назад</a>{% endif %}
+  <span>{{ page }} / {{ pages }}</span>
+  {% if page < pages %}<a class="btn" href="{{ page_url(page + 1) }}">Вперёд →</a>{% endif %}
+</div>
+{% endif %}
+{% endblock %}

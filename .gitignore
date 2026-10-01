@@ -1,0 +1,19 @@
+# Snapshots the app and scripts take before writing
+backups/
+
+# SQLite WAL side files — part of the database only while it is open
+*.sqlite-wal
+*.sqlite-shm
+*.sqlite.new
+
+__pycache__/
+*.pyc
+
+# Third-party installer: download from http://www.ch-werner.de/sqliteodbc/
+sqliteodbc_w64.exe
+
+# Vendor datasheets used as sources; links to them are in the database
+DS/
+
+# Local Claude Code settings
+.claude/

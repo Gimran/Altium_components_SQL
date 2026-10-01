@@ -1,0 +1,8 @@
+{
+  "db_path": "GH_DB_LIB.sqlite",
+  "library_path": "",
+  "host": "127.0.0.1",
+  "port": 8777,
+  "backup_on_write": true,
+  "open_browser": true
+}

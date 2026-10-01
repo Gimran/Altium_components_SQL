@@ -1,0 +1,106 @@
+[OutputDatabaseLinkFile]
+Version=1.1
+[DatabaseLinks]
+ConnectionString=Provider=MSDASQL.1;Persist Security Info=False;Extended Properties="DRIVER=SQLite3 ODBC Driver;Database=H:\CLAUDE_ROOT\component_DB\GH_DB_LIB.sqlite;LongNames=0;NoTXN=1;Timeout=1000;SyncPragma=NORMAL;StepAPI=0;"
+AddMode=3
+RemoveMode=1
+UpdateMode=2
+ViewMode=1
+LeftQuote=[
+RightQuote=]
+QuoteTableNames=1
+UseTableSchemaName=0
+DefaultColumnType=VARCHAR(255)
+LibraryDatabaseType=
+LibraryDatabasePath=
+DatabasePathRelative=0
+TopPanelCollapsed=0
+LibrarySearchPath=.
+OrcadMultiValueDelimiter=,
+SearchSubDirectories=1
+SchemaName=
+LastFocusedTable=IND
+[Table1]
+SchemaName=
+TableName=CAP_YAGEO
+Enabled=True
+UserWhere=0
+UserWhereText=
+BrowserOrder_Sorting=
+BrowserOrder_Grouping=
+BrowserOrder_Visible=Description0=196|Library Ref0=77|Footprint Ref0=92|Library Path0=83|Footprint Path0=98|PartNumber0=124|Footprint Ref 20=101|Footprint Path 20=107|Footprint Ref 30=101|Footprint Path 30=107|Manufacturer0=93|Unit Price (USD)0=103|Value0=52|Tolerance0=72|Voltage0=67|Temperature Coefficient0=146|Operating Temperature0=143|Package0=106|Height - Seated (Max)0=133|Supplier 10=75|Supplier Part Number 10=172|ID0=34|ComponentLink1URL0=613|ComponentLink1Description0=170|ImageURL0=471|Category0=69|CategorySub0=105|Zone0=274
+[Table2]
+SchemaName=
+TableName=IND
+Enabled=True
+UserWhere=0
+UserWhereText=
+BrowserOrder_Sorting=
+BrowserOrder_Grouping=
+BrowserOrder_Visible=Description0=315|Library Ref0=95|Footprint Ref0=101|Library Path0=83|Footprint Path0=98|PartNumber0=115|Footprint Ref 20=101|Footprint Path 20=107|Footprint Ref 30=101|Footprint Path 30=107|ID0=34|Manufacturer0=93|Series0=67|Unit Price (USD)0=103|Value0=52|Tolerance0=72|Impedance @ 1GHz0=123|Current Rating (Amps)0=136|Current - Saturation (Isat)0=153|DC Resistance (DCR)0=126|Frequency - Self Resonant0=157|Grade0=120|Operating Temperature0=143|Package0=100|Size / Dimension0=201|Height - Seated (Max)0=133|Supplier 10=75|Supplier Part Number 10=142|ComponentLink1URL0=655|ComponentLink1Description0=170|ImageURL0=74|Category0=69|CategorySub0=89|Zone0=274
+[Table3]
+SchemaName=
+TableName=RES_YAGEO_RC_L
+Enabled=True
+UserWhere=0
+UserWhereText=
+[FieldMap1]
+Options=FieldName=CAP_YAGEO.Description|TableNameOnly=CAP_YAGEO|FieldNameOnly=Description|FieldType=1|ParameterName=[Description]|VisibleOnAdd=False|AddMode=0|RemoveMode=0|UpdateMode=0
+[FieldMap2]
+Options=FieldName=CAP_YAGEO.Library Ref|TableNameOnly=CAP_YAGEO|FieldNameOnly=Library Ref|FieldType=1|ParameterName=[Library Ref]|VisibleOnAdd=False|AddMode=0|RemoveMode=0|UpdateMode=0
+[FieldMap3]
+Options=FieldName=CAP_YAGEO.Footprint Ref|TableNameOnly=CAP_YAGEO|FieldNameOnly=Footprint Ref|FieldType=1|ParameterName=[Footprint Ref]|VisibleOnAdd=False|AddMode=0|RemoveMode=0|UpdateMode=0
+[FieldMap4]
+Options=FieldName=CAP_YAGEO.Library Path|TableNameOnly=CAP_YAGEO|FieldNameOnly=Library Path|FieldType=1|ParameterName=[Library Path]|VisibleOnAdd=False|AddMode=0|RemoveMode=0|UpdateMode=0
+[FieldMap5]
+Options=FieldName=CAP_YAGEO.Footprint Path|TableNameOnly=CAP_YAGEO|FieldNameOnly=Footprint Path|FieldType=1|ParameterName=[Footprint Path]|VisibleOnAdd=False|AddMode=0|RemoveMode=0|UpdateMode=0
+[FieldMap6]
+Options=FieldName=CAP_YAGEO.PartNumber|TableNameOnly=CAP_YAGEO|FieldNameOnly=PartNumber|FieldType=0|ParameterName=PartNumber|VisibleOnAdd=False|AddMode=0|RemoveMode=0|UpdateMode=0
+[FieldMap7]
+Options=FieldName=CAP_YAGEO.Footprint Ref 2|TableNameOnly=CAP_YAGEO|FieldNameOnly=Footprint Ref 2|FieldType=1|ParameterName=[Footprint Ref 2]|VisibleOnAdd=False|AddMode=0|RemoveMode=0|UpdateMode=0
+[FieldMap8]
+Options=FieldName=CAP_YAGEO.Footprint Path 2|TableNameOnly=CAP_YAGEO|FieldNameOnly=Footprint Path 2|FieldType=1|ParameterName=[Footprint Path 2]|VisibleOnAdd=False|AddMode=0|RemoveMode=0|UpdateMode=0
+[FieldMap9]
+Options=FieldName=CAP_YAGEO.Footprint Ref 3|TableNameOnly=CAP_YAGEO|FieldNameOnly=Footprint Ref 3|FieldType=1|ParameterName=[Footprint Ref 3]|VisibleOnAdd=False|AddMode=0|RemoveMode=0|UpdateMode=0
+[FieldMap10]
+Options=FieldName=CAP_YAGEO.Footprint Path 3|TableNameOnly=CAP_YAGEO|FieldNameOnly=Footprint Path 3|FieldType=1|ParameterName=[Footprint Path 3]|VisibleOnAdd=False|AddMode=0|RemoveMode=0|UpdateMode=0
+[FieldMap11]
+Options=FieldName=IND.Description|TableNameOnly=IND|FieldNameOnly=Description|FieldType=1|ParameterName=[Description]|VisibleOnAdd=False|AddMode=0|RemoveMode=0|UpdateMode=0
+[FieldMap12]
+Options=FieldName=IND.Library Ref|TableNameOnly=IND|FieldNameOnly=Library Ref|FieldType=1|ParameterName=[Library Ref]|VisibleOnAdd=False|AddMode=0|RemoveMode=0|UpdateMode=0
+[FieldMap13]
+Options=FieldName=IND.Footprint Ref|TableNameOnly=IND|FieldNameOnly=Footprint Ref|FieldType=1|ParameterName=[Footprint Ref]|VisibleOnAdd=False|AddMode=0|RemoveMode=0|UpdateMode=0
+[FieldMap14]
+Options=FieldName=IND.Library Path|TableNameOnly=IND|FieldNameOnly=Library Path|FieldType=1|ParameterName=[Library Path]|VisibleOnAdd=False|AddMode=0|RemoveMode=0|UpdateMode=0
+[FieldMap15]
+Options=FieldName=IND.Footprint Path|TableNameOnly=IND|FieldNameOnly=Footprint Path|FieldType=1|ParameterName=[Footprint Path]|VisibleOnAdd=False|AddMode=0|RemoveMode=0|UpdateMode=0
+[FieldMap16]
+Options=FieldName=IND.PartNumber|TableNameOnly=IND|FieldNameOnly=PartNumber|FieldType=0|ParameterName=PartNumber|VisibleOnAdd=False|AddMode=0|RemoveMode=0|UpdateMode=0
+[FieldMap17]
+Options=FieldName=IND.Footprint Ref 2|TableNameOnly=IND|FieldNameOnly=Footprint Ref 2|FieldType=1|ParameterName=[Footprint Ref 2]|VisibleOnAdd=False|AddMode=0|RemoveMode=0|UpdateMode=0
+[FieldMap18]
+Options=FieldName=IND.Footprint Path 2|TableNameOnly=IND|FieldNameOnly=Footprint Path 2|FieldType=1|ParameterName=[Footprint Path 2]|VisibleOnAdd=False|AddMode=0|RemoveMode=0|UpdateMode=0
+[FieldMap19]
+Options=FieldName=IND.Footprint Ref 3|TableNameOnly=IND|FieldNameOnly=Footprint Ref 3|FieldType=1|ParameterName=[Footprint Ref 3]|VisibleOnAdd=False|AddMode=0|RemoveMode=0|UpdateMode=0
+[FieldMap20]
+Options=FieldName=IND.Footprint Path 3|TableNameOnly=IND|FieldNameOnly=Footprint Path 3|FieldType=1|ParameterName=[Footprint Path 3]|VisibleOnAdd=False|AddMode=0|RemoveMode=0|UpdateMode=0
+[FieldMap21]
+Options=FieldName=RES_YAGEO_RC_L.PartNumber|TableNameOnly=RES_YAGEO_RC_L|FieldNameOnly=PartNumber|FieldType=0|ParameterName=PartNumber|VisibleOnAdd=False|AddMode=0|RemoveMode=0|UpdateMode=0
+[FieldMap22]
+Options=FieldName=RES_YAGEO_RC_L.Description|TableNameOnly=RES_YAGEO_RC_L|FieldNameOnly=Description|FieldType=1|ParameterName=[Description]|VisibleOnAdd=False|AddMode=0|RemoveMode=0|UpdateMode=0
+[FieldMap23]
+Options=FieldName=RES_YAGEO_RC_L.Library Ref|TableNameOnly=RES_YAGEO_RC_L|FieldNameOnly=Library Ref|FieldType=1|ParameterName=[Library Ref]|VisibleOnAdd=False|AddMode=0|RemoveMode=0|UpdateMode=0
+[FieldMap24]
+Options=FieldName=RES_YAGEO_RC_L.Footprint Ref|TableNameOnly=RES_YAGEO_RC_L|FieldNameOnly=Footprint Ref|FieldType=1|ParameterName=[Footprint Ref]|VisibleOnAdd=False|AddMode=0|RemoveMode=0|UpdateMode=0
+[FieldMap25]
+Options=FieldName=RES_YAGEO_RC_L.Library Path|TableNameOnly=RES_YAGEO_RC_L|FieldNameOnly=Library Path|FieldType=1|ParameterName=[Library Path]|VisibleOnAdd=False|AddMode=0|RemoveMode=0|UpdateMode=0
+[FieldMap26]
+Options=FieldName=RES_YAGEO_RC_L.Footprint Path|TableNameOnly=RES_YAGEO_RC_L|FieldNameOnly=Footprint Path|FieldType=1|ParameterName=[Footprint Path]|VisibleOnAdd=False|AddMode=0|RemoveMode=0|UpdateMode=0
+[FieldMap27]
+Options=FieldName=RES_YAGEO_RC_L.Footprint Ref 2|TableNameOnly=RES_YAGEO_RC_L|FieldNameOnly=Footprint Ref 2|FieldType=1|ParameterName=[Footprint Ref 2]|VisibleOnAdd=False|AddMode=0|RemoveMode=0|UpdateMode=0
+[FieldMap28]
+Options=FieldName=RES_YAGEO_RC_L.Footprint Path 2|TableNameOnly=RES_YAGEO_RC_L|FieldNameOnly=Footprint Path 2|FieldType=1|ParameterName=[Footprint Path 2]|VisibleOnAdd=False|AddMode=0|RemoveMode=0|UpdateMode=0
+[FieldMap29]
+Options=FieldName=RES_YAGEO_RC_L.Footprint Ref 3|TableNameOnly=RES_YAGEO_RC_L|FieldNameOnly=Footprint Ref 3|FieldType=1|ParameterName=[Footprint Ref 3]|VisibleOnAdd=False|AddMode=0|RemoveMode=0|UpdateMode=0
+[FieldMap30]
+Options=FieldName=RES_YAGEO_RC_L.Footprint Path 3|TableNameOnly=RES_YAGEO_RC_L|FieldNameOnly=Footprint Path 3|FieldType=1|ParameterName=[Footprint Path 3]|VisibleOnAdd=False|AddMode=0|RemoveMode=0|UpdateMode=0
