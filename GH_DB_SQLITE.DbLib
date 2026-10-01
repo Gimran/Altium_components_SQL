@@ -19,7 +19,7 @@ LibrarySearchPath=.
 OrcadMultiValueDelimiter=,
 SearchSubDirectories=1
 SchemaName=
-LastFocusedTable=IND
+LastFocusedTable=CAP_YAGEO
 [Table1]
 SchemaName=
 TableName=CAP_YAGEO
@@ -37,13 +37,16 @@ UserWhere=0
 UserWhereText=
 BrowserOrder_Sorting=
 BrowserOrder_Grouping=
-BrowserOrder_Visible=Description0=315|Library Ref0=95|Footprint Ref0=101|Library Path0=83|Footprint Path0=98|PartNumber0=115|Footprint Ref 20=101|Footprint Path 20=107|Footprint Ref 30=101|Footprint Path 30=107|ID0=34|Manufacturer0=93|Series0=67|Unit Price (USD)0=103|Value0=52|Tolerance0=72|Impedance @ 1GHz0=123|Current Rating (Amps)0=136|Current - Saturation (Isat)0=153|DC Resistance (DCR)0=126|Frequency - Self Resonant0=157|Grade0=120|Operating Temperature0=143|Package0=100|Size / Dimension0=201|Height - Seated (Max)0=133|Supplier 10=75|Supplier Part Number 10=142|ComponentLink1URL0=655|ComponentLink1Description0=170|ImageURL0=74|Category0=69|CategorySub0=89|Zone0=274
+BrowserOrder_Visible=Description0=315|Library Ref0=95|Footprint Ref0=101|Library Path0=83|Footprint Path0=98|PartNumber0=115|Footprint Ref 20=101|Footprint Path 20=107|Footprint Ref 30=101|Footprint Path 30=107|ID0=34|Manufacturer0=93|Series0=67|Unit Price (USD)0=103|Value0=52|Tolerance0=72|Current Rating (Amps)0=136|Current - Saturation (Isat)0=153|DC Resistance (DCR)0=126|Frequency - Self Resonant0=157|Grade0=120|Operating Temperature0=143|Package0=100|Size / Dimension0=201|Height - Seated (Max)0=133|Supplier 10=75|Supplier Part Number 10=142|ComponentLink1URL0=655|ComponentLink1Description0=170|ImageURL0=74|Category0=69|CategorySub0=89|Zone0=274
 [Table3]
 SchemaName=
 TableName=RES_YAGEO_RC_L
 Enabled=True
 UserWhere=0
 UserWhereText=
+BrowserOrder_Sorting=
+BrowserOrder_Grouping=
+BrowserOrder_Visible=PartNumber0=110|Description0=205|Library Ref0=77|Footprint Ref0=92|Library Path0=83|Footprint Path0=98|Footprint Ref 20=101|Footprint Path 20=107|Footprint Ref 30=101|Footprint Path 30=107|ID0=34|ComponentLink1URL0=591|ImageURL0=600|Manufacturer0=93|Unit Price (USD)0=103|Value0=52|Tolerance0=72|Power (Watts)0=94|Composition0=89|Temperature Coefficient0=146|Operating Temperature0=143|Package0=106|Size / Dimension0=201|Height - Seated (Max)0=133|Supplier 10=75|Supplier Part Number 10=158|ComponentLink1Description0=170|Category0=69|CategorySub0=89|Zone0=274
 [FieldMap1]
 Options=FieldName=CAP_YAGEO.Description|TableNameOnly=CAP_YAGEO|FieldNameOnly=Description|FieldType=1|ParameterName=[Description]|VisibleOnAdd=False|AddMode=0|RemoveMode=0|UpdateMode=0
 [FieldMap2]

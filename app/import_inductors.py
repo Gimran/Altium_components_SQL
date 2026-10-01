@@ -45,7 +45,6 @@ COLUMNS = (
     ("Unit Price (USD)", "REAL"),
     ("Value", "TEXT"),
     ("Tolerance", "TEXT"),
-    ("Impedance @ 1GHz", "TEXT"),
     ("Current Rating (Amps)", "TEXT"),
     ("Current - Saturation (Isat)", "TEXT"),
     ("DC Resistance (DCR)", "TEXT"),
@@ -199,11 +198,11 @@ def base(size: str) -> dict:
             "ComponentLink1Description": "Datasheet", "Category": "IND", "Zone": ZONE}
 
 
-def bead(pn, maker, series, size, z, tol, z1g, amps_, dcr, url, grade="Commercial",
+def bead(pn, maker, series, size, z, tol, amps_, dcr, url, grade="Commercial",
          temp="-55°C ~ 125°C") -> dict:
     return {**base(size), "PartNumber": pn, "Manufacturer": maker, "Series": series,
             "Description": f"FERRITE BEAD {z} OHM {size}",
-            "Value": f"{z}Ω", "Tolerance": tol, "Impedance @ 1GHz": z1g,
+            "Value": f"{z}Ω", "Tolerance": tol,
             "Current Rating (Amps)": amps(amps_), "DC Resistance (DCR)": ohms(dcr),
             "Grade": grade, "Operating Temperature": temp,
             "Library Ref": "IND: Ferrite Bead", "CategorySub": "Ferrite Beads",
@@ -213,14 +212,13 @@ def bead(pn, maker, series, size, z, tol, z1g, amps_, dcr, url, grade="Commercia
 def rows() -> list[dict]:
     out = []
     for series, (size, parts) in MURATA_BEADS.items():
-        for pn, z, tol, z1g, ma, dcr in parts:
+        for pn, z, tol, _z1g, ma, dcr in parts:
             url = f"https://www.murata.com/en-us/products/productdetail?partno={pn[:-1]}%23"
-            out.append(bead(pn, "Murata", series, size, z, tol, z1g, ma / 1000, dcr, url))
+            out.append(bead(pn, "Murata", series, size, z, tol, ma / 1000, dcr, url))
 
-    for pn, z, z1g, a, dcr in TDK_MMZ:
+    for pn, z, _z1g, a, dcr in TDK_MMZ:
         url = f"https://product.tdk.com/en/search/emc/emc/beads/info?part_no={pn}"
-        out.append(bead(pn, "TDK", "MMZ0603S", "0201", z, "±25%",
-                        f"{z1g}Ω" if z1g else None, a, dcr, url,
+        out.append(bead(pn, "TDK", "MMZ0603S", "0201", z, "±25%", a, dcr, url,
                         grade="Automotive AEC-Q200" if pn.endswith("D25") else "Commercial"))
 
     for code, l, tol, ma, dcr, srf in LQH2MCN:
