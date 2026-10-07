@@ -9,28 +9,71 @@ Footprint Ref/Path 3-4 when those columns exist. Nothing else is touched, and an
 file is not rewritten. start.cmd runs this on every start.
 
 Close the .DbLib in Altium first: if Altium saves it afterwards, it writes its own copy back.
+
+The absolute path differs from machine to machine, so git keeps the file with a placeholder
+instead (.gitattributes, filter "dblib"): `--clean` puts the placeholder in on commit,
+`--smudge` puts this folder's path back on checkout. Every run registers that filter in the
+clone's .git/config, which git does not carry over on clone.
 """
 from __future__ import annotations
 
 import re
+import shutil
+import subprocess
 import sys
 from pathlib import Path
 
-from check_altium_connection import connection_string, installed_drivers, pick_driver
+from check_altium_connection import DOWNLOAD, connection_string, installed_drivers, pick_driver
 
 ROOT = Path(__file__).resolve().parent.parent
 TARGET = ROOT / "GH_DB_SQLITE.DbLib"
 SQLITE_FILE = ROOT / "GH_DB_LIB.sqlite"
+GIT_PLACEHOLDER = SQLITE_FILE.name
 
 # Whatever name sqliteodbc actually registered; falls back to the usual one so the file can
 # still be generated before the driver is installed.
-ODBC_DRIVER = pick_driver(installed_drivers()) or "SQLite3 ODBC Driver"
+INSTALLED_DRIVER = pick_driver(installed_drivers())
+ODBC_DRIVER = INSTALLED_DRIVER or "SQLite3 ODBC Driver"
 
 SECTION_RE = re.compile(r"^\[(?P<name>[^\]]+)\]\s*$")
+CS_DATABASE_RE = re.compile(r'^(ConnectionString=[^\r\n]*?\bDatabase=)[^;"\r\n]*', re.M)
 
 
 def log(msg: str = "") -> None:
     sys.stdout.buffer.write((msg + "\n").encode("utf-8"))
+
+
+def set_database(text: str, path: str) -> str:
+    # A function, not a replacement string: Windows paths are full of backslashes.
+    return CS_DATABASE_RE.sub(lambda m: m.group(1) + path, text)
+
+
+def database_of(cs: str) -> str:
+    m = re.search(r'\bDatabase=([^;"]*)', cs)
+    return m.group(1) if m else ""
+
+
+def git_filter(flag: str) -> int:
+    """stdin → stdout for git: placeholder on --clean, this folder's database on --smudge."""
+    text = sys.stdin.buffer.read().decode("utf-8", "surrogateescape")
+    path = GIT_PLACEHOLDER if flag == "--clean" else str(SQLITE_FILE)
+    sys.stdout.buffer.write(set_database(text, path).encode("utf-8", "surrogateescape"))
+    return 0
+
+
+def register_git_filter() -> None:
+    git = shutil.which("git")
+    if not git or not (ROOT / ".git").exists():
+        return
+    script = Path(__file__).resolve().relative_to(ROOT).as_posix()
+    for kind in ("clean", "smudge"):
+        key = f"filter.dblib.{kind}"
+        want = f'"{Path(sys.executable).as_posix()}" {script} --{kind}'
+        have = subprocess.run([git, "-C", str(ROOT), "config", "--get", key],
+                              capture_output=True, text=True).stdout.strip()
+        if have != want:
+            subprocess.run([git, "-C", str(ROOT), "config", key, want], capture_output=True)
+            log(f"git: настроен фильтр {key}")
 
 
 def connection_keys() -> dict[str, str]:
@@ -156,7 +199,11 @@ def patch(text: str, drop_tmp_tables: bool) -> tuple[str, list[str]]:
         for line in lines:
             key, sep, value = line.partition("=")
             if sep and key in keys and value != keys[key]:
-                changes.append(f"{key}: {value or '(пусто)'} → {keys[key] or '(пусто)'}")
+                if key == "ConnectionString" and database_of(value) != database_of(keys[key]):
+                    changes.append(f"путь к базе: {database_of(value) or '(пусто)'}"
+                                   f" → {database_of(keys[key])}")
+                else:
+                    changes.append(f"{key}: {value or '(пусто)'} → {keys[key] or '(пусто)'}")
                 line = f"{key}={keys[key]}"
             out.append(line)
     added, notes = missing_field_maps(out)
@@ -171,10 +218,16 @@ def patch(text: str, drop_tmp_tables: bool) -> tuple[str, list[str]]:
 
 
 def main() -> int:
+    if len(sys.argv) > 1 and sys.argv[1] in ("--clean", "--smudge"):
+        return git_filter(sys.argv[1])
     for path in (SQLITE_FILE, TARGET):
         if not path.is_file():
             log(f"не найден {path}")
             return 1
+    register_git_filter()
+    if INSTALLED_DRIVER is None:
+        log("ВНИМАНИЕ: 64-битный ODBC-драйвер SQLite не установлен — Altium не подключится")
+        log(f"  к базе. Поставьте sqliteodbc_w64.exe: {DOWNLOAD}")
     before = TARGET.read_text(encoding="utf-8-sig", errors="replace")
     text, changes = patch(before, drop_tmp_tables=True)
     if text == before.rstrip() + "\n" or not changes:
@@ -184,7 +237,7 @@ def main() -> int:
     log(f"обновлён на месте: {TARGET}")
 
     for change in changes:
-        log(f"  {change[:150]}")
+        log(f"  {change}")
     log(f"драйвер: {ODBC_DRIVER}")
     log(f"секций FieldMap: {sum(1 for l in text.splitlines() if l.startswith('[FieldMap'))}")
     return 0
