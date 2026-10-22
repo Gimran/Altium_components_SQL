@@ -194,7 +194,7 @@ def uh(v: float) -> str:
 def base(size: str) -> dict:
     package, dim, height = BODY[size]
     return {"Package": package, "Size / Dimension": dim, "Height - Seated (Max)": height,
-            "Library Path": "IND_DB.SchLib", "Footprint Path": "IND.PcbLib",
+            "Library Path": "IND_DB.SchLib", "Footprint Path": "IND_DB.PcbLib",
             "ComponentLink1Description": "Datasheet", "Category": "IND", "Zone": ZONE}
 
 

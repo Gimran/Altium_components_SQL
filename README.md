@@ -14,8 +14,9 @@ SQLite и локальный веб-интерфейс, чтобы добавл�
 ```
 GH_DB_LIB.sqlite        база (режим журнала WAL — см. «Altium и открытая база»)
 GH_DB_SQLITE.DbLib      подключение Altium к базе
-SCH/                    символы: CAP.SchLib, RES.SchLib, IND_DB.SchLib
-PCB/                    футпринты: CAP.PcbLib, RES.PcbLib, IND.PcbLib
+SCH/                    символы: CAP_DB.SchLib, RES_DB.SchLib, IND_DB.SchLib
+PCB/                    футпринты: CAP_DB.PcbLib, RES_DB.PcbLib, IND_DB.PcbLib
+                        (суффикс _DB — чтобы не путать с одноимёнными файловыми библиотеками)
 start.cmd / stop.cmd    запуск / остановка веб-интерфейса
 app/
   main.py               веб-интерфейс (FastAPI)
