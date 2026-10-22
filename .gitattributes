@@ -1,0 +1,6 @@
+# The .DbLib holds an absolute path to the database, different on every machine. Git keeps it
+# with a placeholder instead; the filter is set up by app/make_dblib.py (start.cmd runs it).
+GH_DB_SQLITE.DbLib filter=dblib
+
+# cmd.exe misparses goto/labels in batch files with bare LF line endings.
+*.cmd text eol=crlf

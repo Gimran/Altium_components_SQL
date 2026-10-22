@@ -1,7 +1,7 @@
 [OutputDatabaseLinkFile]
 Version=1.1
 [DatabaseLinks]
-ConnectionString=Provider=MSDASQL.1;Persist Security Info=False;Extended Properties="DRIVER=SQLite3 ODBC Driver;Database=H:\CLAUDE_ROOT\component_DB\GH_DB_LIB.sqlite;LongNames=0;NoTXN=1;Timeout=1000;SyncPragma=NORMAL;StepAPI=0;"
+ConnectionString=Provider=MSDASQL.1;Persist Security Info=False;Extended Properties="DRIVER=SQLite3 ODBC Driver;Database=GH_DB_LIB.sqlite;LongNames=0;NoTXN=1;Timeout=1000;SyncPragma=NORMAL;StepAPI=0;"
 AddMode=3
 RemoveMode=1
 UpdateMode=2
