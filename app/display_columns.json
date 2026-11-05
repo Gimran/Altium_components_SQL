@@ -3,10 +3,10 @@
     "PartNumber",
     "Manufacturer",
     "Value",
-    "Description",
     "Package",
-    "Tolerance",
     "Voltage",
-    "Temperature Coefficient"
+    "Temperature Coefficient",
+    "Description",
+    "Tolerance"
   ]
 }
