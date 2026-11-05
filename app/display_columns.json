@@ -8,5 +8,15 @@
     "Temperature Coefficient",
     "Description",
     "Tolerance"
+  ],
+  "SEMI": [
+    "PartNumber",
+    "Manufacturer",
+    "Description",
+    "Package",
+    "Footprint Ref",
+    "Library Ref",
+    "Voltage",
+    "CategorySub"
   ]
 }
