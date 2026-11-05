@@ -1,0 +1,12 @@
+{
+  "CAP_YAGEO": [
+    "PartNumber",
+    "Manufacturer",
+    "Value",
+    "Description",
+    "Package",
+    "Tolerance",
+    "Voltage",
+    "Temperature Coefficient"
+  ]
+}
